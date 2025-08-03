@@ -1009,3 +1009,65 @@ Empyrean = Start({
 	TeleportRadius = 12,
 	UseServerBreakJoints = true,
 })
+
+local Rig = Empyrean.Rig
+local Humanoid = Rig:FindFirstChildOfClass("Humanoid")
+local HRP = Rig:WaitForChild("HumanoidRootPart")
+local RunService = game:GetService("RunService")
+
+local AnimatorModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/elproscriptos/Reanimation-Script-Test/refs/heads/main/AnimatorModule"))()
+local Folderino = game:GetObjects("rbxassetid://77299103607221")[1]
+local Animations = Folderino.Animations
+-- Función para reproducir animaciones
+function PlayAnim(Rig, Animation, AnimFade, AnimSpeed)
+	if not AnimatorModule[Rig] then
+		AnimatorModule[Rig] = {}
+	end
+	if not AnimatorModule[Rig][Animation.Name] then
+		AnimatorModule[Rig][Animation.Name] = AnimatorModule:LoadAnimation(Rig, Animation)
+	end
+	for Name, Track in next, AnimatorModule[Rig] do
+		if Name ~= Animation.Name then
+			Track:Stop()
+		end
+	end
+	-- Siempre reproducir, sin verificar IsPlaying
+	AnimatorModule[Rig][Animation.Name]:Play(AnimFade or 1, AnimSpeed or 1)
+end
+
+-- Función para detener animaciones (opcional si se quiere llamar manualmente)
+function StopAnim(Rig, Anim)
+	if not AnimatorModule[Rig] then
+		AnimatorModule[Rig] = {}
+	end
+	if not AnimatorModule[Rig][Anim.Name] then
+		AnimatorModule[Rig][Anim.Name] = AnimatorModule:LoadAnimation(Rig, Anim)
+	end
+	AnimatorModule[Rig][Anim.Name]:Stop()
+end
+
+-- Animaciones
+local IdleAnim = Animations:WaitForChild("Idle")
+local WalkAnim = Animations:WaitForChild("Walk")
+
+-- Estado actual
+local currentState = "Idle"
+
+-- Monitorizar movimiento para cambiar animación
+RunService.Heartbeat:Connect(function()
+	if not Rig or not HRP or not Humanoid or Humanoid.Health <= 0 then return end
+
+	local speed = HRP.Velocity.Magnitude
+
+	if speed > 1 then -- Caminando
+		if currentState ~= "Walk" then
+			PlayAnim(Rig, WalkAnim, 0.1, 1)
+			currentState = "Walk"
+		end
+	else -- Quieto
+		if currentState ~= "Idle" then
+			PlayAnim(Rig, IdleAnim, 0.1, 1)
+			currentState = "Idle"
+		end
+	end
+end)
