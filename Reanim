@@ -983,7 +983,7 @@ Empyrean = Start({
 		{ MeshId = "12344206657", Names = { "Right Arm", "Left Arm" }, Offset = CFrame.Angles(- 2.094, 0, 0), TextureId = "12344206675" },--12344591101
 
 		{ MeshId = "11449386931", Names = { "Left Arm", "Right Arm" }, Offset = CFrame.Angles(- 2.094, 0, 0), TextureId = "11439439606" },--11449687315
-		{ MeshId = "3030546036", Names = { "Right Arm", "Left Arm" }, Offset = CFrame.Angles(- 2.094, 0, 0), TextureId = "3409604993" },--11449703382
+		{ MeshId = "3030546036", Names = { "Right Arm", "Left Arm" }, Offset = CFrame.Angles(- 2.094, 0.5, 0), TextureId = "3409604993" },--11449703382
 
 		{ MeshId = "12652772399", Names = { "Left Leg", "Right Leg" }, Offset = CFrame.identity, TextureId = "12652775021" },--12652786974
 
@@ -1035,7 +1035,7 @@ Empyrean = Start({
 	BreakJointsDelay = 0.255,
 	ClickFling = true,
 	DefaultFlingOptions = {
-		HatFling = true,--{ MeshId="", TextureId = ""},
+		HatFling = true, { MeshId="3030546036", TextureId = "3650205764"},
 		Highlight = true,
 		PredictionFling = true,
 		Timeout = 1,
