@@ -1,6 +1,6 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 1")
+
 do
 	local Accessories = {}
 
@@ -1043,7 +1043,7 @@ Empyrean = Start({
 	},
 	DisableCharacterCollisions = true,
 	DisableHealthBar = true,
-	DisableRigCollisions = true,
+	DisableRigCollisions = false,
 	HatDrop = true,
 	HideCharacter = Vector3.new(0, - 30, 0),
 	ParentCharacter = true,
