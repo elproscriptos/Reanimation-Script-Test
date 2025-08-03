@@ -982,21 +982,21 @@ Empyrean = Start({
 	},
 	ApplyDescription = true,
 	BreakJointsDelay = 0.255,
-	ClickFling = true,
+	ClickFling = _G.ClickFling,
 	DefaultFlingOptions = {
-		HatFling = true,--{ MeshId="", TextureId = ""},
-		Highlight = true,
+		HatFling = _G.HatFling,--{ MeshId="", TextureId = ""},
+		Highlight = _G.HighlightTargets,
 		PredictionFling = true,
 		Timeout = 1,
-		ToolFling = false,--"Boombox",
+		ToolFling = _G.ToolFling,--"Boombox",
 	},
 	DisableCharacterCollisions = true,
 	DisableHealthBar = true,
 	DisableRigCollisions = true,
-	HatDrop = true,
+	HatDrop = _G.Hatdrop,
 	HideCharacter = Vector3.new(0, - 30, 0),
 	ParentCharacter = true,
-	PermanentDeath = true,
+	PermanentDeath = _G.PermaDeath,
 	Refit = true,
 	RigSize = 1,
 	RigTransparency = 1,
@@ -1007,7 +1007,7 @@ Empyrean = Start({
 	SetCollisionGroup = true,
 	SimulationRadius = 2147483647,
 	TeleportRadius = 12,
-	UseServerBreakJoints = true,
+	UseServerBreakJoints = _G.ServerBreakJoints,
 })
 
 local Rig = Empyrean.Rig
@@ -1018,9 +1018,6 @@ local RunService = game:GetService("RunService")
 local AnimatorModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/elproscriptos/Reanimation-Script-Test/refs/heads/main/AnimatorModule"))()
 local Folderino = game:GetObjects("rbxassetid://77299103607221")[1]
 local Animations = Folderino.Animations
-
--- Rig:FindFirstChild("Animate"):Destroy()
--- Humanoid:FindFirstChild("Animator"):Destroy()
 
 function PlayAnim(Rig, Animation, AnimFade, AnimSpeed)
 	if not AnimatorModule[Rig] then
@@ -1034,10 +1031,10 @@ function PlayAnim(Rig, Animation, AnimFade, AnimSpeed)
 			Track:Stop()
 		end
 	end
-	if not AnimatorModule[Rig][Animation.Name].IsPlaying then
-		AnimatorModule[Rig][Animation.Name]:Play(AnimFade or 1, AnimSpeed or 1)
-	end
+
+	AnimatorModule[Rig][Animation.Name]:Play(AnimFade or 1, AnimSpeed or 1)
 end
+
 
 function StopAnim(Rig, Anim)
 	if not AnimatorModule[Rig] then
@@ -1053,7 +1050,9 @@ end
 local IdleAnim = Animations:WaitForChild("Idle")
 local WalkAnim = Animations:WaitForChild("Walk")
 
+
 local currentState = "Idle"
+
 
 RunService.Heartbeat:Connect(function()
 	if not Rig or not HRP or not Humanoid or Humanoid.Health <= 0 then return end
@@ -1062,12 +1061,12 @@ RunService.Heartbeat:Connect(function()
 
 	if speed > 1 then 
 		if currentState ~= "Walk" then
-			PlayAnim(Rig, WalkAnim, nil, 1)
+			PlayAnim(Rig, WalkAnim, 0.1, 1)
 			currentState = "Walk"
 		end
-	else
+	else 
 		if currentState ~= "Idle" then
-			PlayAnim(Rig, IdleAnim, nil, 1)
+			PlayAnim(Rig, IdleAnim, 0.1, 1)
 			currentState = "Idle"
 		end
 	end
