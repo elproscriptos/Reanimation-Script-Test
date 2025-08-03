@@ -1,6 +1,6 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 3")
+print("algo cambio 3.5")
 do
 	local Accessories = {}
 
@@ -820,14 +820,14 @@ end
 		if OptionsDisableCharacterCollisions and Character then
 			for Index, Descendant in next, GetDescendants(Character) do
 				if IsA(Descendant, "BasePart") then
-					Descendant.CanCollide = false
+				--	Descendant.CanCollide = false
 				end
 			end
 		end
 		if OptionsDisableRigCollisions then
 			for Index, Descendant in next, GetChildren(Rig) do
 				if IsA(Descendant, "BasePart") then
-					Descendant.CanCollide = false
+				--	Descendant.CanCollide = false
 				end
 			end
 		end
