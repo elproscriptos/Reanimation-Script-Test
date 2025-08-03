@@ -1,6 +1,6 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 3.5")
+print("algo cambio 4")
 do
 	local Accessories = {}
 
@@ -248,14 +248,15 @@ end
 
 	local DescendantAdded = function(Descendant)
 		if IsA(Descendant, "Accoutrement") and OptionsHatDrop then
-			if not pcall(NewIndex, Descendant, "BackendAccoutrementState", 0) then
-				if sethiddenproperty then
-					sethiddenproperty(Descendant, "BackendAccoutrementState", 0)
-				elseif setscriptable then
-					setscriptable(Descendant, "BacekndAccoutrementState", true)
-					Descendant.BackendAccoutrementState = 0
-				end
-			end
+			if not pcall(NewIndex, Descendant, "BackendAccoutrementState", 2) then
+    if sethiddenproperty then
+        sethiddenproperty(Descendant, "BackendAccoutrementState", 2)
+    elseif setscriptable then
+        setscriptable(Descendant, "BackendAccoutrementState", true)
+        Descendant.BackendAccoutrementState = 2
+    end
+end
+
 		elseif IsA(Descendant, "Attachment") then
 			local Attachment = Attachments[Descendant.Name]
 
@@ -281,20 +282,20 @@ end
 					if MeshId then
 						for Index, Table in next, Accessories do
 							if Table.MeshId == MeshId and Table.TextureId == TextureId then
-								local Handle = Table.Handle
-                                updatestate(Handle, 4)
-                                Handle.CanCollide = true
-                                task.spawn(function()
-                                     repeat task.wait() until not Handle or Handle.CanCollide or Handle == nil
-                                     Handle.CanCollide = true
-                                end)
+						
 								tableinsert(Aligns, {
 									LastPosition = Handle.Position,
 									Offset = CFrameidentity,
 									Part0 = Parent,
 									Part1 = Handle
 								})
-
+	                         	local Handle = Table.Handle
+                                updatestate(Handle, 2)
+                                Handle.CanCollide = true
+                                task.spawn(function()
+                                     repeat task.wait() until not Handle or Handle.CanCollide or Handle == nil
+                                     Handle.CanCollide = true
+                                end)
 								return
 							end
 						end
