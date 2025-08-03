@@ -1,0 +1,180 @@
+game.Players.LocalPlayer.SimulationRadius = 9999
+game:GetService("RunService").Heartbeat:Connect(function()
+    game.Players.LocalPlayer.SimulationRadius = 9999
+end)
+
+local fph = workspace.FallenPartsDestroyHeight
+local plr = game.Players.LocalPlayer
+local character = plr.Character
+local hrp = character:WaitForChild("HumanoidRootPart")
+local torso = character:FindFirstChild("UpperTorso") or character:FindFirstChild("Torso")
+local start = hrp.CFrame
+
+local campart = Instance.new("Part", character)
+campart.Transparency = 1
+campart.CanCollide = false
+campart.Size = Vector3.one
+campart.Position = start.Position
+campart.Anchored = true
+
+local function updatestate(item, state)
+    if sethiddenproperty then
+        sethiddenproperty(item, "BackendAccoutrementState", state)
+    elseif setscriptable then
+        setscriptable(item, "BackendAccoutrementState", true)
+        item.BackendAccoutrementState = state
+    else
+        local success = pcall(function()
+            item.BackendAccoutrementState = state
+        end)
+        if not success then
+            error("executor not supported, sorry!")
+        end
+    end
+end
+
+local targetHats = {}
+for _, v in ipairs(character:GetChildren()) do
+    if v:FindFirstChild("Handle") then
+        table.insert(targetHats, v)
+    end
+end
+if #targetHats == 0 then
+    error("No items with Handle found!")
+end
+
+function Hatdrop(Character, cb)
+    local hum = Character:WaitForChild("Humanoid")
+    local hrp = Character:WaitForChild("HumanoidRootPart")
+    task.wait(0.3)
+    local AnimationInstance = Instance.new("Animation")
+    AnimationInstance.AnimationId = "rbxassetid://35154961"
+    local startCF = hrp.CFrame
+    local torso = Character:FindFirstChild("Torso") or Character:FindFirstChild("LowerTorso")
+    local Track = hum.Animator:LoadAnimation(AnimationInstance)
+    Track:Play()
+    Track.TimePosition = 3.24
+    Track:AdjustSpeed(0)
+    local locks = {}
+    for i, v in pairs(hum:GetAccessories()) do
+        table.insert(locks, v.Changed:Connect(function(p)
+            if p == "BackendAccoutrementState" then
+                sethiddenproperty(v, "BackendAccoutrementState", 0)
+            end
+        end))
+        sethiddenproperty(v, "BackendAccoutrementState", 2)
+    end
+    local c
+    c = game:GetService("RunService").PostSimulation:Connect(function()
+        if not Character:FindFirstChild("HumanoidRootPart") then 
+            c:Disconnect() 
+            return 
+        end
+        hrp.Velocity = Vector3.new(0, 0, 25)
+        hrp.RotVelocity = Vector3.new(0, 0, 0)
+        hrp.CFrame = CFrame.new(startCF.X, fph + 0.25, startCF.Z) * (Character:FindFirstChild("Torso") and CFrame.Angles(math.rad(90), 0, 0) or CFrame.new())
+    end)
+    task.wait(0.25)
+    if cb then cb(startCF) end
+    hum:ChangeState(15)
+    repeat task.wait() until torso.Parent ~= Character
+    for i, v in pairs(locks) do
+        v:Disconnect()
+    end
+    for i, v in pairs(hum:GetAccessories()) do
+        sethiddenproperty(v, "BackendAccoutrementState", 4)
+    end
+end
+
+for _, hat in ipairs(targetHats) do
+    updatestate(hat, 4)
+    hat.Handle.CanTouch = false
+    Instance.new("SelectionBox", hat.Handle).Adornee = hat.Handle
+end
+
+workspace.FallenPartsDestroyHeight = 0/0
+
+local function play(id, speed, prio, weight)
+    local Anim = Instance.new("Animation")
+    Anim.AnimationId = "https" .. tostring(math.random(1000000, 9999999)) .. "=" .. tostring(id)
+    local track = character.Humanoid:LoadAnimation(Anim)
+    track.Priority = prio
+    track:Play()
+    track:AdjustSpeed(speed)
+    track:AdjustWeight(weight)
+    return track
+end
+
+local r6fall = 180436148
+local r15fall = 507767968
+
+local dropcf = CFrame.new(character.HumanoidRootPart.Position.x, fph - 0.25, character.HumanoidRootPart.Position.z)
+if character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
+    dropcf = dropcf * CFrame.Angles(math.rad(20), 0, 0)
+    character.Humanoid:ChangeState(16)
+    play(r15fall, 1, 5, 1).TimePosition = 0.1
+else
+    play(r6fall, 1, 5, 1).TimePosition = 0.1
+end
+
+spawn(function()
+    while hrp.Parent ~= nil do
+        hrp.CFrame = dropcf
+        hrp.Velocity = Vector3.new(0, 25, 0)
+        hrp.RotVelocity = Vector3.new(0, 0, 0)
+        game:GetService("RunService").Heartbeat:wait()
+    end
+end)
+
+task.wait(0.25)
+
+local globalLockConnections = {}
+for _, hat in ipairs(targetHats) do
+    local conn = hat.Changed:Connect(function(p)
+        if p == "BackendAccoutrementState" then
+            updatestate(hat, 0)
+        end
+    end)
+    table.insert(globalLockConnections, conn)
+    updatestate(hat, 2)
+end
+
+character.Humanoid:ChangeState(15)
+torso.AncestryChanged:wait()
+for _, conn in ipairs(globalLockConnections) do
+    conn:Disconnect()
+end
+for _, hat in ipairs(targetHats) do
+    updatestate(hat, 4)
+end
+
+spawn(function()
+    plr.CharacterAdded:wait():WaitForChild("HumanoidRootPart", 10).CFrame = start
+    workspace.FallenPartsDestroyHeight = fph
+end)
+
+for _, hat in ipairs(targetHats) do
+    spawn(function()
+        repeat task.wait() until not hat:FindFirstChild("Handle") or hat.Handle.CanCollide or plr.Character ~= character or hat.Parent == nil
+        if hat:FindFirstChild("Handle") and hat.Handle.CanCollide then
+            workspace.CurrentCamera.CameraSubject = campart
+            hat.Handle.CanCollide = true
+            hat.Handle.CanTouch = false
+            local sine = 0
+            local NegativeNumber = -10
+            local Number = 10
+            while plr.Character == character and hat and hat.Parent ~= nil do
+                sine = sine + 1
+                plr.SimulationRadius = 9999
+                hat.Handle.Velocity = Vector3.one * 1500
+                hat.Handle.RotVelocity = Vector3.one * 150000
+                hat.Handle.CFrame = CFrame.new(start.Position) *
+                    CFrame.new(math.random(NegativeNumber, Number), math.random(NegativeNumber, Number), math.random(NegativeNumber, Number)) *
+                    CFrame.Angles(math.rad(sine * 2), math.rad(sine * 2), 0)
+                game:GetService("RunService").Heartbeat:wait()
+            end
+        else
+            print("failed to drop hat:", hat.Name)
+        end
+    end)
+end
