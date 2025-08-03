@@ -1,6 +1,6 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-
+print("algo cambio 1")
 do
 	local Accessories = {}
 
