@@ -1,7 +1,5 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 2")
-
 
 do
 	local Accessories = {}
@@ -234,17 +232,16 @@ do
 		self[Index] = Value
 	end
 
-local DescendantAdded = function(Descendant)
-if IsA(Descendant, "Accoutrement") and OptionsHatDrop then
-if not pcall(NewIndex, Descendant, "BackendAccoutrementState", 0) then
-if sethiddenproperty then
-sethiddenproperty(Descendant, "BackendAccoutrementState", 0)
-elseif setscriptable then
-setscriptable(Descendant, "BacekndAccoutrementState", true)
-Descendant.BackendAccoutrementState = 0
-end
-end
-
+	local DescendantAdded = function(Descendant)
+		if IsA(Descendant, "Accoutrement") and OptionsHatDrop then
+			if not pcall(NewIndex, Descendant, "BackendAccoutrementState", 0) then
+				if sethiddenproperty then
+					sethiddenproperty(Descendant, "BackendAccoutrementState", 0)
+				elseif setscriptable then
+					setscriptable(Descendant, "BacekndAccoutrementState", true)
+					Descendant.BackendAccoutrementState = 0
+				end
+			end
 		elseif IsA(Descendant, "Attachment") then
 			local Attachment = Attachments[Descendant.Name]
 
@@ -270,14 +267,15 @@ end
 					if MeshId then
 						for Index, Table in next, Accessories do
 							if Table.MeshId == MeshId and Table.TextureId == TextureId then
-						
+								local Handle = Table.Handle
+
 								tableinsert(Aligns, {
 									LastPosition = Handle.Position,
 									Offset = CFrameidentity,
 									Part0 = Parent,
 									Part1 = Handle
 								})
-	                         
+
 								return
 							end
 						end
@@ -871,9 +869,8 @@ end
 				ScaleTo(Rig, OptionsRigSize)
 
 				RigHumanoid.JumpPower = 50
-				RigHumanoid.WalkSpeed = 20
+				RigHumanoid.WalkSpeed = 16
 			end
-
 
 			OnCurrentCameraChanged()
 			tableinsert(RBXScriptConnections, Connect(CurrentCameraChanged, OnCurrentCameraChanged))
@@ -982,79 +979,22 @@ Empyrean = Start({
 { MeshId = "3030546036", Name = "Left Leg", Offset = CFrame.Angles(-1.57, 0, 1.57), TextureId = "3033898741" },
 { MeshId = "3030546036", Name = "Right Leg", Offset = CFrame.Angles(-1.57, 0, -1.57), TextureId = "3409604993" },
 
-		{ MeshId = "137702817952968", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "135650240593878" },--84451219120140
-		{ MeshId = "137702817952968", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "135650240593878" },--72292903231768
-
-		{ MeshId = "137702817952968", Names = { "Left Leg", "Right Leg", "Left Arm", "Right Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "73798034827573" },--108186273151388
-		{ MeshId = "137702817952968", Names = { "Right Leg", "Left Leg", "Right Arm", "Left Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "73798034827573" },--139904067056008
-
-		{ MeshId = "12344207333", Names = { "Left Arm", "Right Arm" }, Offset = CFrame.Angles(- 2.094, 0, 0), TextureId = "12344207341" },--12344545199
-		{ MeshId = "12344206657", Names = { "Right Arm", "Left Arm" }, Offset = CFrame.Angles(- 2.094, 0, 0), TextureId = "12344206675" },--12344591101
-
-		{ MeshId = "11449386931", Names = { "Left Arm", "Right Arm" }, Offset = CFrame.Angles(- 2.094, 0, 0), TextureId = "11439439606" },--11449687315
-		{ MeshId = "3030546036", Names = { "Right Arm", "Left Arm" }, Offset = CFrame.Angles(- 2.094, 0.5, 0), TextureId = "3409604993" },--11449703382
-
-		{ MeshId = "12652772399", Names = { "Left Leg", "Right Leg" }, Offset = CFrame.identity, TextureId = "12652775021" },--12652786974
-
-		{ MeshId = "11263221350", Names = { "Left Leg", "Right Leg", "Left Arm", "Right Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "11263219250" },--11263254795
-		{ MeshId = "3030546036", Names = { "Right Leg", "Left Leg", "Right Arm", "Left Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "3443321249" },--11159410305
-		{ MeshId = "11159370334", Names = { "Right Leg", "Left Leg", "Right Arm", "Left Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "11159285454" },--11159483910
-
-		{ MeshId = "105141400603933", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "71060417496309" },--102599402682100
-		{ MeshId = "99608462237958", Names = { "Right Arm", "Left Arm", "Right Leg", "Left Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "130809869695496" },--140395948277978
-
-		{ MeshId = "90736849096372", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "79186624401216" },--90960046381276
-		{ MeshId = "139733645770094", Names = { "Right Arm", "Left Arm", "Right Leg", "Left Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "130809869695496" },--82942681251131
-
-		{ MeshId = "125405780718494", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "136752500636691" },--85392395166623
-		{ MeshId = "125405780718494", Names = { "Right Arm", "Left Arm", "Right Leg", "Left Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "136752500636691" },--131385506535381
-
-		{ MeshId = "125405780718494", Names = { "Left Leg", "Right Leg", "Left Arm", "Right Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "136752500636691" },--106249329428811
-		{ MeshId = "125405780718494", Names = { "Right Leg", "Left Leg", "Right Arm", "Left Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "136752500636691" },--129462518582032
-
-		{ MeshId = "14255522247", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "14255543546" },--14255556501
-		{ MeshId = "14255522247", Names = { "Right Arm", "Left Arm", "Right Leg", "Left Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "14255543546" },--14255554762
-
-		{ MeshId = "17374767929", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "17374768001" },--17374851733
-		{ MeshId = "17374767929", Names = { "Right Arm", "Left Arm", "Right Leg", "Left Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "17374768001" },--17374846953
-
-		{ MeshId = "14255522247", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "14255544465" },--14255560646
-		{ MeshId = "14255522247", Names = { "Right Arm", "Left Arm", "Right Leg", "Left Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "14255544465" },--14255562939
-
-		{ MeshId = "18640914129", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.identity, TextureId = "18640914168" },--18641142410
-		{ MeshId = "18640914129", Names = { "Right Arm", "Left Arm", "Right Leg", "Left Leg" }, Offset = CFrame.identity, TextureId = "18640914168" },--18641077392
-
-		{ MeshId = "18640901641", Names = { "Left Leg", "Right Leg", "Left Arm", "Right Arm" }, Offset = CFrame.identity, TextureId = "18640901676" },--18641187217
-		{ MeshId = "18640901641", Names = { "Right Leg", "Left Leg", "Right Arm", "Left Arm" }, Offset = CFrame.identity, TextureId = "18640901676" },--18641157833
-
-		{ MeshId = "4154474745", Names = { "Left Leg", "Right Leg", "Left Arm", "Right Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "4154474807" },--17387616772
-		{ MeshId = "17387586286", Names = { "Right Leg", "Left Leg", "Right Arm", "Left Arm" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "17387586304" },--17393641992
-
-		{ MeshId = "4094864753", Names = { "Left Arm", "Left Leg", "Right Arm", "Right Leg" }, Offset = CFrame.Angles(- 1.57, 0, 0), TextureId = "" },
-		{ MeshId = "4094864753", Names = { "Left Arm", "Left Leg", "Right Arm", "Right Leg" }, Offset = CFrame.Angles(- 1.57, 0, 0), TextureId = "" },
-
-		{ MeshId = "18640899369", Name = "Torso", Offset = CFrame.identity, TextureId = "18640899481" },--18641046146
-		{ MeshId = "14241018198", Name = "Torso", Offset = CFrame.identity, TextureId = "14251599953" },--14255528083
-		{ MeshId = "110684113028749", Name = "Torso", Offset = CFrame.identity, TextureId = "70661572547971" },--138364679836274
-		{ MeshId = "4819720316", Name = "Torso", Offset = CFrame.Angles(0, 0, -0.249), TextureId = "4819722776" },--4819740796
-		{ MeshId = "126825022897778", Name = "Torso", Offset = CFrame.identity, TextureId = "125975972015302" },--95290698984301
-
 	},
 	ApplyDescription = true,
 	BreakJointsDelay = 0.255,
 	ClickFling = true,
 	DefaultFlingOptions = {
-		HatFling = true, { MeshId = "3030546036", TextureId = "3650205764"},
+		HatFling = true,--{ MeshId="", TextureId = ""},
 		Highlight = true,
 		PredictionFling = true,
 		Timeout = 1,
 		ToolFling = false,--"Boombox",
 	},
-	DisableCharacterCollisions = false,
+	DisableCharacterCollisions = true,
 	DisableHealthBar = true,
-	DisableRigCollisions = false,
+	DisableRigCollisions = true,
 	HatDrop = true,
-	HideCharacter = Vector3.new(0, -50, 0),
+	HideCharacter = Vector3.new(0, - 30, 0),
 	ParentCharacter = true,
 	PermanentDeath = true,
 	Refit = true,
@@ -1070,3 +1010,64 @@ Empyrean = Start({
 	UseServerBreakJoints = true,
 })
 
+local Rig = Empyrean.Rig
+local Humanoid = Rig:FindFirstChildOfClass("Humanoid")
+local HRP = Rig:WaitForChild("HumanoidRootPart")
+local RunService = game:GetService("RunService")
+
+local AnimatorModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/elproscriptos/Reanimation-Script-Test/refs/heads/main/AnimatorModule"))()
+local Animations = game:GetObjects("rbxassetid://77299103607221")[1]
+
+-- Función para reproducir animaciones
+function PlayAnim(Rig, Animation, AnimFade, AnimSpeed)
+	if not AnimatorModule[Rig] then
+		AnimatorModule[Rig] = {}
+	end
+	if not AnimatorModule[Rig][Animation.Name] then
+		AnimatorModule[Rig][Animation.Name] = AnimatorModule:LoadAnimation(Rig, Animation)
+	end
+	for Name, Track in next, AnimatorModule[Rig] do
+		if Name ~= Animation.Name then
+			Track:Stop()
+		end
+	end
+	-- Siempre reproducir, sin verificar IsPlaying
+	AnimatorModule[Rig][Animation.Name]:Play(AnimFade or 1, AnimSpeed or 1)
+end
+
+-- Función para detener animaciones (opcional si se quiere llamar manualmente)
+function StopAnim(Rig, Anim)
+	if not AnimatorModule[Rig] then
+		AnimatorModule[Rig] = {}
+	end
+	if not AnimatorModule[Rig][Anim.Name] then
+		AnimatorModule[Rig][Anim.Name] = AnimatorModule:LoadAnimation(Rig, Anim)
+	end
+	AnimatorModule[Rig][Anim.Name]:Stop()
+end
+
+-- Animaciones
+local IdleAnim = Animations:WaitForChild("Idle")
+local WalkAnim = Animations:WaitForChild("Walk")
+
+-- Estado actual
+local currentState = "Idle"
+
+-- Monitorizar movimiento para cambiar animación
+RunService.Heartbeat:Connect(function()
+	if not Rig or not HRP or not Humanoid or Humanoid.Health <= 0 then return end
+
+	local speed = HRP.Velocity.Magnitude
+
+	if speed > 1 then -- Caminando
+		if currentState ~= "Walk" then
+			PlayAnim(Rig, WalkAnim, 0.1, 1)
+			currentState = "Walk"
+		end
+	else -- Quieto
+		if currentState ~= "Idle" then
+			PlayAnim(Rig, IdleAnim, 0.1, 1)
+			currentState = "Idle"
+		end
+	end
+end)
