@@ -1,4 +1,4 @@
-me.Players.LocalPlayer.SimulationRadius = 9999
+game.Players.LocalPlayer.SimulationRadius = 9999
 game:GetService("RunService").Heartbeat:Connect(function()
     game.Players.LocalPlayer.SimulationRadius = 9999
 end)
