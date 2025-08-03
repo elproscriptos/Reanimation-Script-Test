@@ -1,6 +1,6 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 5")
+print("algo cambio 5.5")
 do
 	local Accessories = {}
 
@@ -885,33 +885,7 @@ end
 				RigHumanoid.JumpPower = 50
 				RigHumanoid.WalkSpeed = 20
 			end
-local targetHats = {}
-for _, v in ipairs(Rig:GetChildren()) do
-    if v:FindFirstChild("Handle") then
-        table.insert(targetHats, v)
-    end
-end
-if #targetHats == 0 then
-    error("No items with Handle found!")
-end
 
-for _, hat in ipairs(targetHats) do
-    updatestate(hat, 4)
-    hat.Handle.CanTouch = false
-    Instance.new("SelectionBox", hat.Handle).Adornee = hat.Handle
-end
-for _, hat in ipairs(targetHats) do
-    spawn(function()
-        repeat task.wait() until not hat:FindFirstChild("Handle") or hat.Handle.CanCollide or plr.Character ~= character or hat.Parent == nil
-        if hat:FindFirstChild("Handle") and hat.Handle.CanCollide then
-            hat.Handle.CanCollide = true
-            hat.Handle.CanTouch = false
-        else
-            print("failed to drop hat:", hat.Name)
-        end
-    end)
-end
-workspace.FallenPartsDestroyHeight = 0/0
 
 			OnCurrentCameraChanged()
 			tableinsert(RBXScriptConnections, Connect(CurrentCameraChanged, OnCurrentCameraChanged))
@@ -1102,3 +1076,31 @@ Empyrean = Start({
 	UseServerBreakJoints = true,
 })
 
+local targetHats = {}
+for _, v in ipairs(Rig:GetChildren()) do
+    print(v)
+    if v:FindFirstChild("Handle") then
+        table.insert(targetHats, v)
+    end
+end
+if #targetHats == 0 then
+    error("No items with Handle found!")
+end
+
+for _, hat in ipairs(targetHats) do
+    updatestate(hat, 4)
+    hat.Handle.CanTouch = false
+    Instance.new("SelectionBox", hat.Handle).Adornee = hat.Handle
+end
+for _, hat in ipairs(targetHats) do
+    spawn(function()
+        repeat task.wait() until not hat:FindFirstChild("Handle") or hat.Handle.CanCollide or plr.Character ~= character or hat.Parent == nil
+        if hat:FindFirstChild("Handle") and hat.Handle.CanCollide then
+            hat.Handle.CanCollide = true
+            hat.Handle.CanTouch = false
+        else
+            print("failed to drop hat:", hat.Name)
+        end
+    end)
+end
+workspace.FallenPartsDestroyHeight = 0/0
