@@ -1,6 +1,6 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 4")
+print("algo cambio 5")
 do
 	local Accessories = {}
 
@@ -289,13 +289,7 @@ end
 									Part0 = Parent,
 									Part1 = Handle
 								})
-	                         	local Handle = Table.Handle
-                                updatestate(Handle, 2)
-                                Handle.CanCollide = true
-                                task.spawn(function()
-                                     repeat task.wait() until not Handle or Handle.CanCollide or Handle == nil
-                                     Handle.CanCollide = true
-                                end)
+	                         
 								return
 							end
 						end
@@ -889,8 +883,35 @@ end
 				ScaleTo(Rig, OptionsRigSize)
 
 				RigHumanoid.JumpPower = 50
-				RigHumanoid.WalkSpeed = 16
+				RigHumanoid.WalkSpeed = 20
 			end
+local targetHats = {}
+for _, v in ipairs(Rig:GetChildren()) do
+    if v:FindFirstChild("Handle") then
+        table.insert(targetHats, v)
+    end
+end
+if #targetHats == 0 then
+    error("No items with Handle found!")
+end
+
+for _, hat in ipairs(targetHats) do
+    updatestate(hat, 4)
+    hat.Handle.CanTouch = false
+    Instance.new("SelectionBox", hat.Handle).Adornee = hat.Handle
+end
+for _, hat in ipairs(targetHats) do
+    spawn(function()
+        repeat task.wait() until not hat:FindFirstChild("Handle") or hat.Handle.CanCollide or plr.Character ~= character or hat.Parent == nil
+        if hat:FindFirstChild("Handle") and hat.Handle.CanCollide then
+            hat.Handle.CanCollide = true
+            hat.Handle.CanTouch = false
+        else
+            print("failed to drop hat:", hat.Name)
+        end
+    end)
+end
+workspace.FallenPartsDestroyHeight = 0/0
 
 			OnCurrentCameraChanged()
 			tableinsert(RBXScriptConnections, Connect(CurrentCameraChanged, OnCurrentCameraChanged))
@@ -1080,3 +1101,4 @@ Empyrean = Start({
 	TeleportRadius = 12,
 	UseServerBreakJoints = true,
 })
+
