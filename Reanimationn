@@ -1011,10 +1011,64 @@ Empyrean = Start({
 })
 
 local Rig = Empyrean.Rig
-local Humanoid = Rig:FindFirstAncestorWhichIsA("Humanoid")
+local Humanoid = Rig:FindFirstChildOfClass("Humanoid")
+local HRP = Rig:WaitForChild("HumanoidRootPart")
+local RunService = game:GetService("RunService")
 
-local Animation = Instance.new("Animation")
-Animation.AnimationId = "rbxassetid://93780109609194"
+local AnimatorModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/elproscriptos/Reanimation-Script-Test/refs/heads/main/AnimatorModule"))()
+local Folderino = game:GetObjects("rbxassetid://77299103607221")[1]
+local Animations = Folderino.Animations
 
-local Track = Humanoid:LoadAnimation(Animation)
-Track:Play()
+-- Rig:FindFirstChild("Animate"):Destroy()
+-- Humanoid:FindFirstChild("Animator"):Destroy()
+
+function PlayAnim(Rig, Animation, AnimFade, AnimSpeed)
+	if not AnimatorModule[Rig] then
+		AnimatorModule[Rig] = {}
+	end
+	if not AnimatorModule[Rig][Animation.Name] then
+		AnimatorModule[Rig][Animation.Name] = AnimatorModule:LoadAnimation(Rig, Animation)
+	end
+	for Name, Track in next, AnimatorModule[Rig] do
+		if Name ~= Animation.Name then
+			Track:Stop()
+		end
+	end
+	if not AnimatorModule[Rig][Animation.Name].IsPlaying then
+		AnimatorModule[Rig][Animation.Name]:Play(AnimFade or 1, AnimSpeed or 1)
+	end
+end
+
+function StopAnim(Rig, Anim)
+	if not AnimatorModule[Rig] then
+		AnimatorModule[Rig] = {}
+	end
+	if not AnimatorModule[Rig][Anim.Name] then
+		AnimatorModule[Rig][Anim.Name] = AnimatorModule:LoadAnimation(Rig, Anim)
+	end
+	AnimatorModule[Rig][Anim.Name]:Stop()
+end
+
+
+local IdleAnim = Animations:WaitForChild("Idle")
+local WalkAnim = Animations:WaitForChild("Walk")
+
+local currentState = "Idle"
+
+RunService.Heartbeat:Connect(function()
+	if not Rig or not HRP or not Humanoid or Humanoid.Health <= 0 then return end
+
+	local speed = HRP.Velocity.Magnitude
+
+	if speed > 1 then 
+		if currentState ~= "Walk" then
+			PlayAnim(Rig, WalkAnim, nil, 1)
+			currentState = "Walk"
+		end
+	else
+		if currentState ~= "Idle" then
+			PlayAnim(Rig, IdleAnim, nil, 1)
+			currentState = "Idle"
+		end
+	end
+end)
