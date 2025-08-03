@@ -1,6 +1,6 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 2")
+print("algo cambio 3")
 do
 	local Accessories = {}
 
@@ -196,7 +196,21 @@ do
 			end
 		end
 	end
-
+local function updatestate(item, state)
+    if sethiddenproperty then
+        sethiddenproperty(item, "BackendAccoutrementState", state)
+    elseif setscriptable then
+        setscriptable(item, "BackendAccoutrementState", true)
+        item.BackendAccoutrementState = state
+    else
+        local success = pcall(function()
+            item.BackendAccoutrementState = state
+        end)
+        if not success then
+            error("executor not supported, sorry!")
+        end
+    end
+end
 	local GetHandleFromTable = function(Table)
 		for Index, Child in GetChildren(Character) do
 			if IsA(Child, "Accoutrement") then
@@ -268,7 +282,12 @@ do
 						for Index, Table in next, Accessories do
 							if Table.MeshId == MeshId and Table.TextureId == TextureId then
 								local Handle = Table.Handle
-
+                                updatestate(Handle, 4)
+                                Handle.CanCollide = true
+                                task.spawn(function()
+                                     repeat task.wait() until not Handle or Handle.CanCollide or Handle == nil
+                                     Handle.CanCollide = true
+                                end)
 								tableinsert(Aligns, {
 									LastPosition = Handle.Position,
 									Offset = CFrameidentity,
@@ -1035,13 +1054,13 @@ Empyrean = Start({
 	BreakJointsDelay = 0.255,
 	ClickFling = true,
 	DefaultFlingOptions = {
-		HatFling = true, { MeshId="3030546036", TextureId = "3650205764"},
+		HatFling = true, { MeshId = "3030546036", TextureId = "3650205764"},
 		Highlight = true,
 		PredictionFling = true,
 		Timeout = 1,
 		ToolFling = false,--"Boombox",
 	},
-	DisableCharacterCollisions = true,
+	DisableCharacterCollisions = false,
 	DisableHealthBar = true,
 	DisableRigCollisions = false,
 	HatDrop = true,
@@ -1056,7 +1075,7 @@ Empyrean = Start({
 	SetCameraType = true,
 	SetCharacter = false,
 	SetCollisionGroup = true,
-	SimulationRadius = 2147483647,
+	SimulationRadius = 9999,
 	TeleportRadius = 12,
 	UseServerBreakJoints = true,
 })
