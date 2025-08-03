@@ -1,6 +1,6 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 6")
+print("algo cambio 1")
 do
 	local Accessories = {}
 
@@ -1076,7 +1076,7 @@ Empyrean = Start({
 	UseServerBreakJoints = true,
 })
 local Rig = Empyrean.Rig
-
+local targetHats = {}
 for _, v in ipairs(Rig:GetChildren()) do
     print(v)
     if v:FindFirstChild("Handle") then
