@@ -1,3 +1,15 @@
+local player = game.Players.LocalPlayer
+local Players = game:GetService("Players")
+function Permadeath(player)
+    if replicatesignal then
+        replicatesignal(player.ConnectDiedSignalBackend)
+        task.wait(Players.RespawnTime + 0.1)
+    else
+       --xd
+       return
+    end
+end
+Permadeath(player)
 game.Players.LocalPlayer.SimulationRadius = 9999
 game:GetService("RunService").Heartbeat:Connect(function()
     game.Players.LocalPlayer.SimulationRadius = 9999
