@@ -1,6 +1,8 @@
 -- Made by @emperrrr (Discord)
 -- Discord server: https://discord.gg/UJ7YtqadPJ
-print("algo cambio 3.5")
+print("algo cambio 3")
+
+
 do
 	local Accessories = {}
 
@@ -196,21 +198,7 @@ do
 			end
 		end
 	end
-local function updatestate(item, state)
-    if sethiddenproperty then
-        sethiddenproperty(item, "BackendAccoutrementState", state)
-    elseif setscriptable then
-        setscriptable(item, "BackendAccoutrementState", true)
-        item.BackendAccoutrementState = state
-    else
-        local success = pcall(function()
-            item.BackendAccoutrementState = state
-        end)
-        if not success then
-            error("executor not supported, sorry!")
-        end
-    end
-end
+
 	local GetHandleFromTable = function(Table)
 		for Index, Child in GetChildren(Character) do
 			if IsA(Child, "Accoutrement") then
@@ -248,14 +236,15 @@ end
 
 	local DescendantAdded = function(Descendant)
 		if IsA(Descendant, "Accoutrement") and OptionsHatDrop then
-			if not pcall(NewIndex, Descendant, "BackendAccoutrementState", 0) then
-				if sethiddenproperty then
-					sethiddenproperty(Descendant, "BackendAccoutrementState", 0)
-				elseif setscriptable then
-					setscriptable(Descendant, "BacekndAccoutrementState", true)
-					Descendant.BackendAccoutrementState = 0
-				end
-			end
+			if not pcall(NewIndex, Descendant, "BackendAccoutrementState", 2) then
+    if sethiddenproperty then
+        sethiddenproperty(Descendant, "BackendAccoutrementState", 2)
+    elseif setscriptable then
+        setscriptable(Descendant, "BackendAccoutrementState", true)
+        Descendant.BackendAccoutrementState = 2
+    end
+end
+
 		elseif IsA(Descendant, "Attachment") then
 			local Attachment = Attachments[Descendant.Name]
 
@@ -281,20 +270,14 @@ end
 					if MeshId then
 						for Index, Table in next, Accessories do
 							if Table.MeshId == MeshId and Table.TextureId == TextureId then
-								local Handle = Table.Handle
-                                updatestate(Handle, 4)
-                                Handle.CanCollide = true
-                                task.spawn(function()
-                                     repeat task.wait() until not Handle or Handle.CanCollide or Handle == nil
-                                     Handle.CanCollide = true
-                                end)
+						
 								tableinsert(Aligns, {
 									LastPosition = Handle.Position,
 									Offset = CFrameidentity,
 									Part0 = Parent,
 									Part1 = Handle
 								})
-
+	                         
 								return
 							end
 						end
@@ -888,8 +871,9 @@ end
 				ScaleTo(Rig, OptionsRigSize)
 
 				RigHumanoid.JumpPower = 50
-				RigHumanoid.WalkSpeed = 16
+				RigHumanoid.WalkSpeed = 20
 			end
+
 
 			OnCurrentCameraChanged()
 			tableinsert(RBXScriptConnections, Connect(CurrentCameraChanged, OnCurrentCameraChanged))
@@ -1079,3 +1063,49 @@ Empyrean = Start({
 	TeleportRadius = 12,
 	UseServerBreakJoints = true,
 })
+
+local function updatestate(item, state)
+    if sethiddenproperty then
+        sethiddenproperty(item, "BackendAccoutrementState", state)
+    elseif setscriptable then
+        setscriptable(item, "BackendAccoutrementState", true)
+        item.BackendAccoutrementState = state
+    else
+        local success = pcall(function()
+            item.BackendAccoutrementState = state
+        end)
+        if not success then
+            error("executor not supported, sorry!")
+        end
+    end
+end
+
+local Rig = Empyrean.Rig:FindFirstChild("AccountCosmic44")
+local targetHats = {}
+for _, v in ipairs(Rig:GetChildren()) do
+    print(v)
+    if v:FindFirstChild("Handle") then
+        table.insert(targetHats, v)
+    end
+end
+if #targetHats == 0 then
+    error("No items with Handle found!")
+end
+
+for _, hat in ipairs(targetHats) do
+    updatestate(hat, 4)
+    hat.Handle.CanTouch = false
+    Instance.new("SelectionBox", hat.Handle).Adornee = hat.Handle
+end
+for _, hat in ipairs(targetHats) do
+    spawn(function()
+        repeat task.wait() until not hat:FindFirstChild("Handle") or hat.Handle.CanCollide or plr.Character ~= character or hat.Parent == nil
+        if hat:FindFirstChild("Handle") and hat.Handle.CanCollide then
+            hat.Handle.CanCollide = true
+            hat.Handle.CanTouch = false
+        else
+            print("failed to drop hat:", hat.Name)
+        end
+    end)
+end
+workspace.FallenPartsDestroyHeight = 0/0
