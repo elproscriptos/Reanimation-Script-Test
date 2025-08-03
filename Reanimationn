@@ -234,15 +234,15 @@ do
 		self[Index] = Value
 	end
 
-	local DescendantAdded = function(Descendant)
-		if IsA(Descendant, "Accoutrement") and OptionsHatDrop then
-			if not pcall(NewIndex, Descendant, "BackendAccoutrementState", 2) then
-    if sethiddenproperty then
-        sethiddenproperty(Descendant, "BackendAccoutrementState", 2)
-    elseif setscriptable then
-        setscriptable(Descendant, "BackendAccoutrementState", true)
-        Descendant.BackendAccoutrementState = 2
-    end
+local DescendantAdded = function(Descendant)
+if IsA(Descendant, "Accoutrement") and OptionsHatDrop then
+if not pcall(NewIndex, Descendant, "BackendAccoutrementState", 0) then
+if sethiddenproperty then
+sethiddenproperty(Descendant, "BackendAccoutrementState", 0)
+elseif setscriptable then
+setscriptable(Descendant, "BacekndAccoutrementState", true)
+Descendant.BackendAccoutrementState = 0
+end
 end
 
 		elseif IsA(Descendant, "Attachment") then
@@ -803,14 +803,14 @@ end
 		if OptionsDisableCharacterCollisions and Character then
 			for Index, Descendant in next, GetDescendants(Character) do
 				if IsA(Descendant, "BasePart") then
-				--	Descendant.CanCollide = false
+					Descendant.CanCollide = false
 				end
 			end
 		end
 		if OptionsDisableRigCollisions then
 			for Index, Descendant in next, GetChildren(Rig) do
 				if IsA(Descendant, "BasePart") then
-				--	Descendant.CanCollide = false
+					Descendant.CanCollide = false
 				end
 			end
 		end
@@ -975,6 +975,12 @@ end
 Empyrean = Start({
 	Accessories = {
 		--{ MeshId = "", Name = "", Offset = CFrame.identity, TextureId = "" },
+--free rig
+{ MeshId = "4819720316", Name = "Torso", Offset = CFrame.Angles(0, 0, -0.25), TextureId = "4819722776" },
+{ MeshId = "3030546036", Name = "Left Arm", Offset = CFrame.Angles(-1.57, 0, 1.57), TextureId = "3033903209" },
+{ MeshId = "3030546036", Name = "Right Arm", Offset = CFrame.Angles(-1.57, 0, -1.57), TextureId = "3360978739" },
+{ MeshId = "3030546036", Name = "Left Leg", Offset = CFrame.Angles(-1.57, 0, 1.57), TextureId = "3033898741" },
+{ MeshId = "3030546036", Name = "Right Leg", Offset = CFrame.Angles(-1.57, 0, -1.57), TextureId = "3409604993" },
 
 		{ MeshId = "137702817952968", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "135650240593878" },--84451219120140
 		{ MeshId = "137702817952968", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "135650240593878" },--72292903231768
@@ -1048,7 +1054,7 @@ Empyrean = Start({
 	DisableHealthBar = true,
 	DisableRigCollisions = false,
 	HatDrop = true,
-	HideCharacter = Vector3.new(0, - 30, 0),
+	HideCharacter = Vector3.new(0, -50, 0),
 	ParentCharacter = true,
 	PermanentDeath = true,
 	Refit = true,
@@ -1059,67 +1065,8 @@ Empyrean = Start({
 	SetCameraType = true,
 	SetCharacter = false,
 	SetCollisionGroup = true,
-	SimulationRadius = 9999,
+	SimulationRadius = 2147483647,
 	TeleportRadius = 12,
-	UseServerBreakJoints = true,
+	UseServerBreakJoints = false,
 })
 
-local function updatestate(item, state)
-    if sethiddenproperty then
-        sethiddenproperty(item, "BackendAccoutrementState", state)
-    elseif setscriptable then
-        setscriptable(item, "BackendAccoutrementState", true)
-        item.BackendAccoutrementState = state
-    else
-        local success = pcall(function()
-            item.BackendAccoutrementState = state
-        end)
-        if not success then
-            error("executor not supported, sorry!")
-        end
-    end
-end
-
-local Rig = Empyrean.Rig:FindFirstChild("AccountCosmic44")
-local targetHats = {}
-for _, v in ipairs(Rig:GetChildren()) do
-    print(v)
-    if v:FindFirstChild("Handle") then
-        table.insert(targetHats, v)
-    end
-end
-if #targetHats == 0 then
-    error("No items with Handle found!")
-end
-local globalLockConnections = {}
-for _, hat in ipairs(targetHats) do
-    local conn = hat.Changed:Connect(function(p)
-        if p == "BackendAccoutrementState" then
-            updatestate(hat, 0)
-        end
-    end)
-    table.insert(globalLockConnections, conn)
-    updatestate(hat, 2)
-end
-
-for _, hat in ipairs(targetHats) do
-    updatestate(hat, 4)
-     hat.Handle.CanCollide = true
-    hat.Handle.CanTouch = false
-    Instance.new("SelectionBox", hat.Handle).Adornee = hat.Handle
-end
-for _, conn in ipairs(globalLockConnections) do
-    conn:Disconnect()
-end
-for _, hat in ipairs(targetHats) do
-    spawn(function()
-        repeat task.wait() until not hat:FindFirstChild("Handle") or hat.Handle.CanCollide or plr.Character ~= character or hat.Parent == nil
-        if hat:FindFirstChild("Handle") and hat.Handle.CanCollide then
-            hat.Handle.CanCollide = true
-            hat.Handle.CanTouch = false
-        else
-            print("failed to drop hat:", hat.Name)
-        end
-    end)
-end
-workspace.FallenPartsDestroyHeight = 0/0
