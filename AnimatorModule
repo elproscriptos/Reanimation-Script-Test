@@ -58,9 +58,7 @@ end
 function AnimatorModule:LoadAnimation(Rig, KeyframeSequence)
 	local Sequence = KeyframeSequence
 	local RigHumanoid = Rig:FindFirstChildOfClass("Humanoid")
-	if RigHumanoid.RigType ~= Enum.HumanoidRigType.R6 then
-		return error("Rig Humanoid is not R6!")
-	end
+
 	local Joints = {
 
 		["Torso"] = Rig.HumanoidRootPart:FindFirstChild("RootJoint") or Rig.HumanoidRootPart:FindFirstChild("Root Joint"),
