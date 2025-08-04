@@ -1096,6 +1096,8 @@ if v292 then
     l_LinearVelocity_0.LineVelocity = 40
     l_LinearVelocity_0.Attachment0 = v292:FindFirstChild("RootAttachment") or v292:FindFirstChildOfClass("Attachment")
     l_LinearVelocity_0.Parent = v292
+	task.wait(0.2)
+	l_LinearVelocity_0:Destroy()
 end
 	end
 end)
