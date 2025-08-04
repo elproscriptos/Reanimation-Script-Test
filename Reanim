@@ -993,7 +993,7 @@ Empyrean = Start({
 	Refit = true,
 	RigSize = 1,
 	RigTransparency = 1,
-	R15 = false,
+	R15 = _G.R15,
 	SetCameraSubject = true,
 	SetCameraType = true,
 	SetCharacter = false,
@@ -1044,7 +1044,7 @@ local IdleAnim = Animations:WaitForChild("Idle")
 local WalkAnim = Animations:WaitForChild("Walk")
 local PunchAnim = Animations:WaitForChild("Punch")
 local ChargeAnim = Animations:WaitForChild("Charge")
-
+local Stunned = false
 local UserInputService = game:GetService("UserInputService")
 
 local currentState = "Idle"
@@ -1055,13 +1055,13 @@ RunService.Heartbeat:Connect(function()
 
 	local speed = HRP.Velocity.Magnitude
 
-	if speed > 1 then 
-		if currentState ~= "Walk" then
+	if speed > 1  then 
+		if currentState ~= "Walk" and Stunned == false then
 			PlayAnim(Rig, WalkAnim, 0, 1)
 			currentState = "Walk"
 		end
 	else 
-		if currentState ~= "Idle" then
+		if currentState ~= "Idle"  and Stunned == false then
 			PlayAnim(Rig, IdleAnim, 0.1, 1)
 			currentState = "Idle"
 		end
@@ -1072,8 +1072,10 @@ UserInputService.InputBegan:Connect(function(key, gameprocessed)
 	if Enum.KeyCode.E == key.KeyCode then
 		PlayAnim(Rig, ChargeAnim, nil, 1)
 	elseif Enum.KeyCode.R == key.KeyCode then
+		Stunned = true
         PlayAnim(Rig, PunchAnim, nil, 1)
-local v292 = Rig.HumanoidRootPart
+        task.wait(0.3)
+		    local v292 = Rig.HumanoidRootPart
 
 if v292 and v292:IsA("Model") then
     v292 = v292.PrimaryPart
@@ -1086,18 +1088,20 @@ if v292 then
             l_AssemblyMass_0 = l_AssemblyMass_0 + v296.AssemblyMass
         end
     end
-
+ 
     local l_LinearVelocity_0 = Instance.new("LinearVelocity")
     l_LinearVelocity_0.MaxForce = l_AssemblyMass_0 * 350
     l_LinearVelocity_0.RelativeTo = Enum.ActuatorRelativeTo.World
     l_LinearVelocity_0.VelocityConstraintMode = Enum.VelocityConstraintMode.Line
     l_LinearVelocity_0.LineDirection = v292.CFrame.LookVector
     l_LinearVelocity_0.LineDirection = Vector3.new(l_LinearVelocity_0.LineDirection.X, 0, l_LinearVelocity_0.LineDirection.Z)
-    l_LinearVelocity_0.LineVelocity = 40
+    l_LinearVelocity_0.LineVelocity = 45
     l_LinearVelocity_0.Attachment0 = v292:FindFirstChild("RootAttachment") or v292:FindFirstChildOfClass("Attachment")
     l_LinearVelocity_0.Parent = v292
-	task.wait(0.2)
+	task.wait(0.3)
 	l_LinearVelocity_0:Destroy()
+	task.wait(0.2)
+	Stunned = false
 end
 	end
 end)
