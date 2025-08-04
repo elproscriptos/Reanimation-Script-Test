@@ -1009,7 +1009,7 @@ local HRP = Rig:WaitForChild("HumanoidRootPart")
 local RunService = game:GetService("RunService")
 
 local AnimatorModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/elproscriptos/Reanimation-Script-Test/refs/heads/main/AnimatorModule"))()
-local Folderino = game:GetObjects("rbxassetid://77299103607221")[1]
+local Folderino = game:GetObjects("rbxassetid://133363864773386")[1]
 local Animations = Folderino.Animations
 
 function PlayAnim(Rig, Animation, AnimFade, AnimSpeed)
@@ -1042,7 +1042,10 @@ end
 
 local IdleAnim = Animations:WaitForChild("Idle")
 local WalkAnim = Animations:WaitForChild("Walk")
+local PunchAnim = Animations:WaitForChild("Punch")
+local ChargeAnim = Animations:WaitForChild("Charge")
 
+local UserInputService = game:GetService("UserInputService")
 
 local currentState = "Idle"
 
@@ -1054,7 +1057,7 @@ RunService.Heartbeat:Connect(function()
 
 	if speed > 1 then 
 		if currentState ~= "Walk" then
-			PlayAnim(Rig, WalkAnim, 0.1, 1)
+			PlayAnim(Rig, WalkAnim, 0, 1)
 			currentState = "Walk"
 		end
 	else 
@@ -1062,5 +1065,37 @@ RunService.Heartbeat:Connect(function()
 			PlayAnim(Rig, IdleAnim, 0.1, 1)
 			currentState = "Idle"
 		end
+	end
+end)
+
+UserInputService.InputBegan:Connect(function(key, gameprocessed)
+	if Enum.KeyCode.E == key.KeyCode then
+		PlayAnim(Rig, ChargeAnim, nil, 1)
+	elseif Enum.KeyCode.R == key.KeyCode then
+        PlayAnim(Rig, PunchAnim, nil, 1)
+local v292 = Rig.HumanoidRootPart
+
+if v292 and v292:IsA("Model") then
+    v292 = v292.PrimaryPart
+end
+
+if v292 then
+    local l_AssemblyMass_0 = v292.AssemblyMass
+    for _, v296 in pairs(v292.Parent:GetDescendants()) do
+        if v296:IsA("BasePart") and not v296.Massless and v296 ~= v292 then
+            l_AssemblyMass_0 = l_AssemblyMass_0 + v296.AssemblyMass
+        end
+    end
+
+    local l_LinearVelocity_0 = Instance.new("LinearVelocity")
+    l_LinearVelocity_0.MaxForce = l_AssemblyMass_0 * 350
+    l_LinearVelocity_0.RelativeTo = Enum.ActuatorRelativeTo.World
+    l_LinearVelocity_0.VelocityConstraintMode = Enum.VelocityConstraintMode.Line
+    l_LinearVelocity_0.LineDirection = v292.CFrame.LookVector
+    l_LinearVelocity_0.LineDirection = Vector3.new(l_LinearVelocity_0.LineDirection.X, 0, l_LinearVelocity_0.LineDirection.Z)
+    l_LinearVelocity_0.LineVelocity = 40
+    l_LinearVelocity_0.Attachment0 = v292:FindFirstChild("RootAttachment") or v292:FindFirstChildOfClass("Attachment")
+    l_LinearVelocity_0.Parent = v292
+end
 	end
 end)
