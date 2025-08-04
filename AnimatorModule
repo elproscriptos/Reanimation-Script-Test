@@ -38,9 +38,7 @@ end
 function AnimatorModule:ResetJoints(Rig)
 	local RigHumanoid = Rig:FindFirstChildOfClass("Humanoid")
 	assert(RigHumanoid:IsA("Humanoid"), "Rig Humanoid Missing!")
-	if not RigHumanoid.RigType == Enum.HumanoidRigType.R6 then
-		return error("Rig Humanoid is not R6!")
-	end
+
 	local Joints = {
 
 		["Torso"] = Rig.HumanoidRootPart:FindFirstChild("RootJoint") or Rig.HumanoidRootPart:FindFirstChild("Root Joint"),
