@@ -1,3 +1,4 @@
+local GUIS = {}
 do
 	local Accessories = {}
 
@@ -615,8 +616,9 @@ do
 			ModelBreakJoints(Character)
 
 			if Humanoid then
-				if replicatesignal and OptionsUseServerBreakJoints then
-					replicatesignal(Humanoid.ServerBreakJoints)
+				if  OptionsUseServerBreakJoints then
+						replicatesignal(Humanoid.ServerBreakJoints)
+					
 				end
 				
 				ChangeState(Humanoid, Dead)
@@ -930,6 +932,9 @@ do
 			end
 
 			tableclear(Highlights)
+            for i,v in pairs(GUIS) do
+              v:Destroy()
+		    end
 
 			for Index, RBXScriptConnection in next, RBXScriptConnections do
 				Disconnect(RBXScriptConnection)
@@ -965,7 +970,6 @@ do
 		end
 	end
 end
-
 Empyrean = Start({
 	--[[Accessories = {
 		--{ MeshId = "", Name = "", Offset = CFrame.identity, TextureId = "" },
@@ -980,6 +984,22 @@ Empyrean = Start({
 
 	Accessories = {
 		--{ MeshId = "", Name = "", Offset = CFrame.identity, TextureId = "" },
+
+--BIG RIG
+
+{ MeshId = "121668589285446", Name = "Torso", Offset = CFrame.Angles(0, 3.15, 0), TextureId = "85260593368362" },
+{ MeshId = "117649985156221", Name = "Left Arm", Offset = CFrame.Angles(0, 0, 1.57), TextureId = "103757531289975" },
+{ MeshId = "93749227415046", Name = "Right Arm", Offset = CFrame.Angles(0, 3.15, 1.57), TextureId = "103757531289975" },
+{ MeshId = "76010149115685", Names =  "Right Leg" , Offset = CFrame.Angles(0, 0, 1.57), TextureId = "103160995675216" },--18641142410
+{ MeshId = "137156465227879", Names =  "Left Leg" , Offset = CFrame.Angles(0, 0, 1.57), TextureId = "103160995675216" },--18641142410
+
+
+
+{ MeshId = "125443585075666", Name = "Torso", Offset = CFrame.Angles(0, 3.15, 0), TextureId = "121023324229475" },
+{ MeshId = "121342985816617", Name = "Left Arm", Offset = CFrame.Angles(0, 0, 1.57), TextureId = "129264637819824" },
+{ MeshId = "121342985816617", Name = "Right Arm", Offset = CFrame.Angles(0, 3.15, 1.57), TextureId = "129264637819824" },
+{ MeshId = "83395427313429", Names = { "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "97148121718581" },--18641142410
+
 
 		{ MeshId = "137702817952968", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "135650240593878" },--84451219120140
 		{ MeshId = "137702817952968", Names = { "Left Arm", "Right Arm", "Left Leg", "Right Leg" }, Offset = CFrame.Angles(0, 0, 1.57), TextureId = "135650240593878" },--72292903231768
@@ -1114,6 +1134,13 @@ local ChargeAnim = Animations:WaitForChild("Charge")
 local Stunned = false
 local EPressed = false
 local UserInputService = game:GetService("UserInputService")
+local UIFolder = Folderino.UI
+local EmotePlaying
+
+for i,v in pairs(UIFolder:GetChildren()) do
+    table.insert(GUIS, v)
+    v.Parent = game.CoreGui
+end
 
 local currentState = "Idle"
 
@@ -1125,7 +1152,15 @@ RunService.Heartbeat:Connect(function()
 
 	if speed > 1  then 
 		if currentState ~= "Walk" and Stunned == false then
+			if EmotePlaying then
+            StopAnim(Rig, EmotePlaying)
+			end
 			PlayAnim(Rig, WalkAnim, 0, 1)
+			for i,v in pairs(Rig.HumanoidRootPart:GetChildren()) do
+               if v:IsA("Sound") then
+                 v:Destroy()
+			   end
+			end
 			currentState = "Walk"
 		end
 	else 
@@ -1135,47 +1170,11 @@ RunService.Heartbeat:Connect(function()
 		end
 	end
 end)
-
-UserInputService.InputBegan:Connect(function(key, gameprocessed)
-if Enum.KeyCode.E == key.KeyCode and EPressed == false then
-		EPressed = true
-		PlayAnim(Rig, ChargeAnim, nil, 1)
-				    local v292 = Rig.HumanoidRootPart
-
-if v292 and v292:IsA("Model") then
-    v292 = v292.PrimaryPart
-end
-
-if v292 then
-    local l_AssemblyMass_0 = v292.AssemblyMass
-    for _, v296 in pairs(v292.Parent:GetDescendants()) do
-        if v296:IsA("BasePart") and not v296.Massless and v296 ~= v292 then
-            l_AssemblyMass_0 = l_AssemblyMass_0 + v296.AssemblyMass
-        end
-    end
- 
-    local l_LinearVelocity_0 = Instance.new("LinearVelocity")
-	l_LinearVelocity_0.Name = "ChargeVelocity"
-    l_LinearVelocity_0.MaxForce = l_AssemblyMass_0 * 350
-    l_LinearVelocity_0.RelativeTo = Enum.ActuatorRelativeTo.World
-    l_LinearVelocity_0.VelocityConstraintMode = Enum.VelocityConstraintMode.Line
-    l_LinearVelocity_0.LineDirection = v292.CFrame.LookVector
-    l_LinearVelocity_0.LineDirection = Vector3.new(l_LinearVelocity_0.LineDirection.X, 0, l_LinearVelocity_0.LineDirection.Z)
-    l_LinearVelocity_0.LineVelocity = 25
-    l_LinearVelocity_0.Attachment0 = v292:FindFirstChild("RootAttachment") or v292:FindFirstChildOfClass("Attachment")
-    l_LinearVelocity_0.Parent = v292
-	task.wait(4)
-	l_LinearVelocity_0:Destroy()
-	Stunned = false
-    EPressed = true
-elseif Enum.KeyCode.E == key.KeyCode and EPressed == true and Rig.HumanoidRootPart:FindFirstChild("ChargeVelocity") then
-  EPressed = false
-  Stunned = false
-  Rig.HumanoidRootPart:FindFirstChild("ChargeVelocity"):Destroy()
-	elseif Enum.KeyCode.R == key.KeyCode then
-		Stunned = true
+function Punch()
+	if Stunned == true then return end
+	Stunned = true
         PlayAnim(Rig, PunchAnim, nil, 1)
-        task.wait(0.3)
+        task.wait(0.6)
 		    local v292 = Rig.HumanoidRootPart
 
 if v292 and v292:IsA("Model") then
@@ -1202,7 +1201,139 @@ if v292 then
 	task.wait(0.3)
 	l_LinearVelocity_0:Destroy()
 	task.wait(0.2)
+	StopAnim(Rig, PunchAnim)
 	Stunned = false
-end
+       end
 	end
+
+function Charge()
+	if Stunned then return end
+	EPressed = true
+	Stunned = true
+	Rig.Humanoid.WalkSpeed = 40
+	PlayAnim(Rig, ChargeAnim, nil, 1)
+	local v292 = Rig.HumanoidRootPart
+
+	if v292 and v292:IsA("Model") then
+		v292 = v292.PrimaryPart
+	end
+
+	if v292 then
+		local l_AssemblyMass_0 = v292.AssemblyMass
+		for _, v296 in pairs(v292.Parent:GetDescendants()) do
+			if v296:IsA("BasePart") and not v296.Massless and v296 ~= v292 then
+				l_AssemblyMass_0 = l_AssemblyMass_0 + v296.AssemblyMass
+			end
+		end
+
+
+
+		local humanoid = Rig:WaitForChild("Humanoid")
+		local rootPart = Rig:WaitForChild("HumanoidRootPart")
+
+
+		local currentDir = workspace.CurrentCamera.CFrame.LookVector
+		currentDir = Vector3.new(currentDir.X, 0, currentDir.Z).Unit
+
+		local chargeSpeed = 25 
+		local turnSpeed = 8 
+
+		local connection
+		connection = RunService.RenderStepped:Connect(function(dt)
+			if not Rig or not Rig.Parent then
+				connection:Disconnect()
+				return
+			end
+
+			local camDir = workspace.CurrentCamera.CFrame.LookVector
+			local flatDir = Vector3.new(camDir.X, 0, camDir.Z).Unit
+			local diff = flatDir - currentDir
+			local mag = diff.Magnitude
+
+			if mag > 0 then
+				local maxTurn = turnSpeed * dt
+				if mag <= maxTurn then
+					currentDir = flatDir
+				else
+					currentDir = (currentDir + diff.Unit * maxTurn).Unit
+				end
+			end
+
+			humanoid:Move(currentDir * chargeSpeed)
+		end)
+
+		task.delay(4, function()
+			StopAnim(Rig, ChargeAnim)
+			Rig.Humanoid.WalkSpeed = 16
+			EPressed = false
+			Stunned = false
+			if connection then
+				connection:Disconnect()
+			end
+			humanoid:Move(Vector3.zero)
+		end)
+   end
+end
+
+for i, gui in pairs(GUIS) do
+	if gui.Name == "AbilityUI" then
+		gui.Punch.MouseButton1Click:Connect(function()
+			Punch()
+		end)
+
+		gui.Charge.MouseButton1Click:Connect(function()
+			Charge()
+		end)
+	elseif gui.Name == "EmoteUI" then
+        
+		UserInputService.InputBegan:Connect(function(key)
+		   if Enum.KeyCode.G == key.KeyCode then
+		   local GUI = gui
+             	if GUI then
+		if not GUI.EmoteMenuHolder.Visible then
+			game.TweenService:Create(GUI.EmoteMenuHolder, TweenInfo.new(0.15), {
+				Size = UDim2.fromScale(0.5, 0.5)
+			}):Play()
+
+			GUI.EmoteMenuHolder.Visible = true
+		
+			
+		else
+			game.TweenService:Create(GUI.EmoteMenuHolder, TweenInfo.new(0.15), {
+				Size = UDim2.fromScale()
+			}):Play()
+
+			task.wait(0.15)
+			GUI.EmoteMenuHolder.Visible = false
+		
+		end
+	end
+		   end
+		end)
+
+		for j, button in pairs(gui.EmoteMenuHolder.RadialMenu.Attach:GetDescendants()) do
+			if button:IsA("ImageButton") then
+				button.MouseButton1Click:Connect(function()
+					EmotePlaying = Animations:FindFirstChild(button.Name)
+					PlayAnim(Rig, Animations:FindFirstChild(button.Name), nil, 1)
+					local Sound = Folderino.Sounds.Emotes:FindFirstChild(button.Name)
+					if Sound then
+						local SoundClone = Sound:Clone()
+						SoundClone.Parent = Rig.HumanoidRootPart
+						SoundClone:Play()
+					end
+				end)
+			end
+		end
+	end
+end
+
+
+UserInputService.InputBegan:Connect(function(key, gameprocessed)
+if Enum.KeyCode.E == key.KeyCode  then
+   Charge()
+
+elseif Enum.KeyCode.R == key.KeyCode then
+	Punch()
+end
 end)
